@@ -1,0 +1,186 @@
+* {
+    margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+
+}
+
+nav {
+    display: flex;
+    background-color: black;
+    width: 100%;
+    gap: 50px;
+    color: white;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+
+}
+
+nav ul {
+    display: flex;
+    gap: 50px;
+    margin-right: 20px;
+}
+
+nav img {
+
+    width: 100px;
+    justify-content: space-between;
+
+}
+
+.container1 {
+    height: 100%;
+    width: 100%;
+
+    background-image: url(https://4kwallpapers.com/images/wallpapers/beautiful-girl-woman-monochrome-dark-background-portrait-5120x2880-2965.jpeg);
+    background-size: cover;
+    color: rgb(255, 255, 255);
+
+}
+
+
+.logo img{
+    height: 20px;
+    border-radius:50% ;
+}
+
+.storesong {
+
+    width: 60%;
+    margin-top: 100px;
+    height: 60%;
+}
+
+.song {
+    display: flex;
+
+    height: 30px;
+    margin-top: 10px;
+    background-color: rgb(51, 43, 43);
+    width: 40%;
+    justify-content: space-evenly;
+    text-align: center;
+    align-items: center;
+    margin-left: 50px;
+}
+
+.text {
+    color: rgb(255, 255, 255);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.time {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: rgb(255, 255, 255);
+}
+
+.songlist {
+    background-color: rgb(243, 243, 243);
+    height: 60px;
+    width: 100%;
+    margin-top: 50px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+}
+
+.songoprate {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+}
+
+.songrange {
+    width: 100%;
+}
+
+input {
+    cursor: pointer;
+}
+
+.back img {
+    height: 30px;
+    cursor: pointer;
+
+}
+
+.next img {
+    height: 30px;
+    margin-left: 10px;
+    mix-blend-mode: color-burn;
+    cursor: pointer;
+
+}
+
+.imageplay {
+    height: 30px;
+    margin-left: 10px;
+    mix-blend-mode: color-burn;
+    cursor: pointer;
+
+}
+
+.imagepause {
+    height: 30px;
+
+    margin-left: 10px;
+    mix-blend-mode: color-burn;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+.songlist .imageplay {
+    display: none;
+}
+
+.songlist .imagepause {
+    display: block;
+}
+
+.songlist .play .imageplay {
+    display: block;
+}
+
+.songlist .play .imagepause {
+    display: none;
+}
+
+
+
+
+.song .imageplay1 {
+    display: none;
+}
+
+.song .imagepause1 {
+    display: block;
+}
+
+.song .playing .imageplay1 {
+    display: block;
+}
+
+.song .playing .imagepause1 {
+    display: none;
+}
