@@ -6,10 +6,10 @@ const storesong = document.querySelector('.storesong')
 const songRange = document.querySelector('.songrange');
 const onoffElements = document.querySelectorAll('.onoff');
 const songoprate = document.querySelector('.songoprate')
-
-
-let current = 0
-let currentindex = 0
+const masterplay  = document.querySelector('.masteronoff .imageplay');
+const masterpause  = document.querySelector('.masteronoff .imagepause');
+let currentindex = 0;
+let currentDuration = 0;
 let audio = new Audio();
 let song = [
     {
@@ -57,9 +57,7 @@ let song = [
 
 
 song.forEach(function (value, index) {
-    storesong.innerHTML +=
-
-        `   <div class="song">
+    storesong.innerHTML += `<div class="song">
     <div class="logo">
         <img src="${value.logo}" alt="logo">
     </div>
@@ -73,40 +71,75 @@ song.forEach(function (value, index) {
         <img src="https://w7.pngwing.com/pngs/851/883/png-transparent-audio-multimedia-music-pause-player-rounded-stop-play-rounded-icon-thumbnail.png"
             alt="" class="imageplay imageplay1">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnAEKKAcI-fwfR0_vDwthmrpqXOFiMYz4dRw&usqp=CAU"
-            alt="" class="imagepause imagepause1">
+            alt="" class="imagepause imagepause1 ">
     </div>
 </div>`
 })
 
-onoffElements.forEach((element, index) => {
-    element.addEventListener('click', function () {
-        opratesong(index, this);
-    });
-});
-
-
 
 function playSong(index, element) {
-    if (current !== index || audio.paused) {
-        current = index;
-        audio.src = song[index].path;
-        audio.play();
-    } else {
-        audio.pause();
-    }
-    element.classList.toggle('playing')
-}
-
-function opratesong(index, element) {
     if (currentindex !== index || audio.paused) {
         currentindex = index;
         audio.src = song[index].path;
+        audio.currentTime = currentDuration;
+        audio.play();
+        imagepause.style.display = 'none'
+        imageplay.style.display = 'block'        
+    } else {
+        audio.pause();
+        imagepause.style.display = 'block'
+        imageplay.style.display = 'none'
+    }
+    element.classList.toggle('playing')
+    const allMusicButtons  = document.querySelectorAll('.onoff');
+
+    allMusicButtons.forEach(function(element, index){
+        if(index !== currentindex){
+            element.classList.remove('playing');
+        }
+    })
+}
+
+function masterPlaysong() {
+    if (audio.paused) {
+        audio.src = song[currentindex].path;
+        audio.currentTime = currentDuration;
         audio.play();
     } else {
         audio.pause();
     }
-    element.classList.toggle('play')
+    masterpause.style.display = 'none';
+    masterplay.style.display = "block";
+
+    const allMusicButtons  = document.querySelectorAll('.onoff');
+
+    allMusicButtons.forEach(function(element, index){
+        if(index === currentindex){
+            element.classList.add('playing');
+        }else{
+            element.classList.remove('playing');
+        }
+    })
+
 }
+
+function masterPausesong() {
+    if (audio.paused) {
+        audio.src = song[currentindex].path;
+        audio.play();
+    } else {
+        audio.pause();
+    }
+    masterpause.style.display = 'block';
+    masterplay.style.display = "none";
+    const allMusicButtons  = document.querySelectorAll('.onoff');
+    allMusicButtons.forEach(function(element, index){
+            element.classList.remove('playing');
+    })
+}
+
+masterpause.addEventListener('click', masterPlaysong);
+masterplay.addEventListener('click', masterPausesong);
 
 const nextButton = document.querySelector('.next');
 
@@ -123,6 +156,19 @@ nextButton.addEventListener('click', function () {
     // } 
     audio.src = song[currentindex].path;
     audio.play();
+    masterpause.style.display = 'none';
+    masterplay.style.display = "block";
+
+    const allMusicButtons  = document.querySelectorAll('.onoff');
+
+    allMusicButtons.forEach(function(element, index){
+        if(index === currentindex){
+            element.classList.add('playing');
+        }else{
+            element.classList.remove('playing');
+
+        }
+    })
 });
 backButton.addEventListener('click', function () {
     currentindex--;
@@ -131,13 +177,63 @@ backButton.addEventListener('click', function () {
     }
     audio.src = song[currentindex].path;
     audio.play();
+    masterpause.style.display = 'none';
+    masterplay.style.display = "block";
+
+    const allMusicButtons  = document.querySelectorAll('.onoff');
+
+    allMusicButtons.forEach(function(element, index){
+        if(index === currentindex){
+            element.classList.add('playing');
+        }else{
+            element.classList.remove('playing');
+
+        }
+    })
 });
 
 audio.addEventListener('timeupdate', function () {
     const progress = (this.currentTime / this.duration) * 100;
     songRange.value = progress;
+    currentDuration = this.currentTime;
 });
 songRange.addEventListener('input', function () {
     const newTime = (audio.duration / 100) * this.value;
     audio.currentTime = newTime;
 });
+
+
+audio.addEventListener('ended', function() {
+    currentindex++;
+    
+
+    if (currentindex >= song.length) {
+        currentindex = 0;
+    }
+    
+    audio.src = song[currentindex].path;
+    audio.play();
+
+    masterpause.style.display = 'none';
+    masterplay.style.display = "block";
+    
+   
+    const allMusicButtons = document.querySelectorAll('.onoff');
+    allMusicButtons.forEach(function(element, index){
+        if(index === currentindex){
+            element.classList.add('playing');
+        } else {
+            element.classList.remove('playing');
+        }
+    });
+});
+ 
+
+// function repeatsong()
+// {
+
+// }
+
+// function randomsong(){
+
+// }
