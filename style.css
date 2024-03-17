@@ -15,11 +15,11 @@ body {
     height: 30px;
     margin-left: 20px;
     margin-right: 20px;
+    cursor: pointer;
 }
 
 .repeat{
     height: 30px;
-    margin-left: 20px;
     cursor: pointer;
 }
 img{

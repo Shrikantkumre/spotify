@@ -6,10 +6,12 @@ const storesong = document.querySelector('.storesong')
 const songRange = document.querySelector('.songrange');
 const onoffElements = document.querySelectorAll('.onoff');
 const songoprate = document.querySelector('.songoprate')
-const masterplay  = document.querySelector('.masteronoff .imageplay');
-const masterpause  = document.querySelector('.masteronoff .imagepause');
+const masterplay = document.querySelector('.masteronoff .imageplay');
+const masterpause = document.querySelector('.masteronoff .imagepause');
 let currentindex = 0;
 let currentDuration = 0;
+let isRepeatPlaylist = false;
+let isShufflePlaylist = false;
 let audio = new Audio();
 let song = [
     {
@@ -84,17 +86,17 @@ function playSong(index, element) {
         audio.currentTime = currentDuration;
         audio.play();
         imagepause.style.display = 'none'
-        imageplay.style.display = 'block'        
+        imageplay.style.display = 'block'
     } else {
         audio.pause();
         imagepause.style.display = 'block'
         imageplay.style.display = 'none'
     }
     element.classList.toggle('playing')
-    const allMusicButtons  = document.querySelectorAll('.onoff');
+    const allMusicButtons = document.querySelectorAll('.onoff');
 
-    allMusicButtons.forEach(function(element, index){
-        if(index !== currentindex){
+    allMusicButtons.forEach(function (element, index) {
+        if (index !== currentindex) {
             element.classList.remove('playing');
         }
     })
@@ -111,12 +113,12 @@ function masterPlaysong() {
     masterpause.style.display = 'none';
     masterplay.style.display = "block";
 
-    const allMusicButtons  = document.querySelectorAll('.onoff');
+    const allMusicButtons = document.querySelectorAll('.onoff');
 
-    allMusicButtons.forEach(function(element, index){
-        if(index === currentindex){
+    allMusicButtons.forEach(function (element, index) {
+        if (index === currentindex) {
             element.classList.add('playing');
-        }else{
+        } else {
             element.classList.remove('playing');
         }
     })
@@ -132,9 +134,9 @@ function masterPausesong() {
     }
     masterpause.style.display = 'block';
     masterplay.style.display = "none";
-    const allMusicButtons  = document.querySelectorAll('.onoff');
-    allMusicButtons.forEach(function(element, index){
-            element.classList.remove('playing');
+    const allMusicButtons = document.querySelectorAll('.onoff');
+    allMusicButtons.forEach(function (element, index) {
+        element.classList.remove('playing');
     })
 }
 
@@ -159,12 +161,12 @@ nextButton.addEventListener('click', function () {
     masterpause.style.display = 'none';
     masterplay.style.display = "block";
 
-    const allMusicButtons  = document.querySelectorAll('.onoff');
+    const allMusicButtons = document.querySelectorAll('.onoff');
 
-    allMusicButtons.forEach(function(element, index){
-        if(index === currentindex){
+    allMusicButtons.forEach(function (element, index) {
+        if (index === currentindex) {
             element.classList.add('playing');
-        }else{
+        } else {
             element.classList.remove('playing');
 
         }
@@ -180,12 +182,12 @@ backButton.addEventListener('click', function () {
     masterpause.style.display = 'none';
     masterplay.style.display = "block";
 
-    const allMusicButtons  = document.querySelectorAll('.onoff');
+    const allMusicButtons = document.querySelectorAll('.onoff');
 
-    allMusicButtons.forEach(function(element, index){
-        if(index === currentindex){
+    allMusicButtons.forEach(function (element, index) {
+        if (index === currentindex) {
             element.classList.add('playing');
-        }else{
+        } else {
             element.classList.remove('playing');
 
         }
@@ -203,37 +205,103 @@ songRange.addEventListener('input', function () {
 });
 
 
-audio.addEventListener('ended', function() {
-    currentindex++;
-    
+audio.addEventListener('ended', function () {
+    if(isShufflePlaylist){
+        currentindex = Math.floor(Math.random() * song.length);
+    }else{
+        currentindex++;
+    }
+
 
     if (currentindex >= song.length) {
         currentindex = 0;
     }
-    
+
     audio.src = song[currentindex].path;
     audio.play();
 
     masterpause.style.display = 'none';
     masterplay.style.display = "block";
-    
-   
+
+
     const allMusicButtons = document.querySelectorAll('.onoff');
-    allMusicButtons.forEach(function(element, index){
-        if(index === currentindex){
+    allMusicButtons.forEach(function (element, index) {
+        if (index === currentindex) {
             element.classList.add('playing');
         } else {
             element.classList.remove('playing');
         }
     });
 });
- 
 
-// function repeatsong()
-// {
 
-// }
+function loopsong() {
+    // audio.play();
+    isShufflePlaylist = false;
+    audio.loop = !audio.loop;
+    if(audio.loop){
+        document.querySelector('.loop').style.backgroundColor='red'
+    }else{
+        document.querySelector('.loop').style.backgroundColor='transparent'
+    }
+    document.querySelector('.repeat').style.backgroundColor = "";
+    document.querySelector('.random').style.backgroundColor = "";
+}
 
-// function randomsong(){
 
-// }
+
+function randomsong() {
+    isShufflePlaylist= !isShufflePlaylist;
+    
+    if(isShufflePlaylist){
+        let randomIndex = Math.floor(Math.random() * song.length);
+        while (randomIndex === currentindex) {
+            randomIndex = Math.floor(Math.random() * song.length);
+        }
+        currentindex = randomIndex;
+        audio.src = song[currentindex].path;
+        audio.play();
+        masterpause.style.display = 'none';
+        masterplay.style.display = "block";
+        const allMusicButtons = document.querySelectorAll('.onoff');
+        allMusicButtons.forEach(function (element, index) {
+            if (index === currentindex) {
+                element.classList.add('playing');
+            } else {
+                element.classList.remove('playing');
+            }
+        });
+        document.querySelector('.random').style.backgroundColor = "red";
+        document.querySelector('.repeat').style.backgroundColor = "";
+        document.querySelector('.loop').style.backgroundColor = ""; 
+    }else{
+        document.querySelector('.random').style.backgroundColor = "";
+ document.querySelector('.repeat').style.backgroundColor = "";
+ document.querySelector('.loop').style.backgroundColor = "";
+        
+    }
+    
+    
+}
+
+
+// const loopButton = document.querySelector('.loop');
+// loopButton.addEventListener('click', function() {
+//     loopsong(currentindex);
+// });
+
+function repeatsong() {
+    audio.loop = false;
+    isShufflePlaylist = false;
+    isRepeatPlaylist = !isRepeatPlaylist;
+    if(isRepeatPlaylist){
+        document.querySelector('.random').style.backgroundColor = "";
+    document.querySelector('.repeat').style.backgroundColor = "red";
+    document.querySelector('.loop').style.backgroundColor = "";
+    }else{
+        document.querySelector('.random').style.backgroundColor = "";
+    document.querySelector('.repeat').style.backgroundColor = "";
+    document.querySelector('.loop').style.backgroundColor = "";
+    }
+    // nextButton()
+}
